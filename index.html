@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Toolo - Générateur de mots de passe</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f7f8fa;
+      color: #263b5a;
+    }
+
+    header {
+      background: white;
+      padding: 20px 7%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: bold;
+      color: #263b5a;
+    }
+
+    nav a {
+      margin-left: 25px;
+      text-decoration: none;
+      color: #263b5a;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 70px 20px 40px;
+      background: white;
+    }
+
+    h1 {
+      color: #f5a623;
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+
+    .hero p {
+      font-size: 20px;
+      max-width: 800px;
+      margin: auto;
+      line-height: 1.6;
+    }
+
+    .generator {
+      max-width: 700px;
+      margin: 50px auto;
+      background: white;
+      padding: 35px;
+      border-radius: 15px;
+      box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+    }
+
+    .generator h2 {
+      text-align: center;
+      color: #f5a623;
+      font-size: 30px;
+    }
+
+    label {
+      display: block;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      margin-top: 15px;
+    }
+
+    .length {
+      text-align: center;
+      font-size: 20px;
+      margin: 10px;
+    }
+
+    .options {
+      margin-top: 20px;
+    }
+
+    .options label {
+      font-weight: normal;
+      margin: 10px 0;
+    }
+
+    .password {
+      display: flex;
+      margin-top: 25px;
+    }
+
+    #password {
+      flex: 1;
+      padding: 15px;
+      font-size: 18px;
+      border: 1px solid #ccc;
+      border-radius: 8px 0 0 8px;
+    }
+
+    button {
+      border: none;
+      padding: 15px 20px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    #generate {
+      width: 100%;
+      margin-top: 25px;
+      background: #f5a623;
+      color: white;
+      border-radius: 8px;
+    }
+
+    #generate:hover {
+      background: #df9114;
+    }
+
+    #copy {
+      background: #263b5a;
+      color: white;
+      border-radius: 0 8px 8px 0;
+    }
+
+    #copy:hover {
+      background: #1c2d46;
+    }
+
+    #message {
+      text-align: center;
+      margin-top: 15px;
+      color: green;
+      min-height: 20px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px;
+      color: #777;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 34px;
+      }
+
+      nav {
+        display: none;
+      }
+
+      .generator {
+        margin: 30px 15px;
+        padding: 25px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">Toolo</div>
+
+  <nav>
+    <a href="#">Accueil</a>
+    <a href="#generateur">Générateur</a>
+    <a href="#apropos">À propos</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h1>Générateur de mots de passe</h1>
+  <p>
+    Créez un mot de passe sécurisé en quelques secondes.
+    Choisissez la longueur souhaitée et générez votre mot de passe gratuitement.
+  </p>
+</section>
+
+<section class="generator" id="generateur">
+
+  <h2>Créer un mot de passe sécurisé</h2>
+
+  <label for="length">Longueur du mot de passe</label>
+
+  <input
+    type="range"
+    id="length"
+    min="6"
+    max="50"
+    value="16"
+  >
+
+  <div class="length">
+    <span id="lengthValue">16</span> caractères
+  </div>
+
+  <div class="options">
+
+    <label>
+      <input type="checkbox" id="uppercase" checked>
+      Lettres majuscules
+    </label>
+
+    <label>
+      <input type="checkbox" id="lowercase" checked>
+      Lettres minuscules
+    </label>
+
+    <label>
+      <input type="checkbox" id="numbers" checked>
+      Chiffres
+    </label>
+
+    <label>
+      <input type="checkbox" id="symbols" checked>
+      Symboles
+    </label>
+
+  </div>
+
+  <div class="password">
+    <input
+      type="text"
+      id="password"
+      readonly
+      placeholder="Votre mot de passe apparaîtra ici"
+    >
+
+    <button id="copy">Copier</button>
+  </div>
+
+  <button id="generate">
+    🔐 Générer un mot de passe
+  </button>
+
+  <div id="message"></div>
+
+</section>
+
+<footer id="apropos">
+  © 2026 Toole - Générateur de mots de passe gratuit
+</footer>
+
+<script>
+  const lengthSlider = document.getElementById("length");
+  const lengthValue = document.getElementById("lengthValue");
+  const passwordInput = document.getElementById("password");
+  const generateButton = document.getElementById("generate");
+  const copyButton = document.getElementById("copy");
+  const message = document.getElementById("message");
+
+  lengthSlider.addEventListener("input", function () {
+    lengthValue.textContent = this.value;
+  });
+
+  function generatePassword() {
+
+    let characters = "";
+
+    if (document.getElementById("uppercase").checked) {
+      characters += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    }
+
+    if (document.getElementById("lowercase").checked) {
+      characters += "abcdefghijklmnopqrstuvwxyz";
+    }
+
+    if (document.getElementById("numbers").checked) {
+      characters += "0123456789";
+    }
+
+    if (document.getElementById("symbols").checked) {
+      characters += "!@#$%^&*()_+-=[]{}|;:,.<>?";
+    }
+
+    if (characters.length === 0) {
+      message.style.color = "red";
+      message.textContent = "Choisissez au moins une option.";
+      return;
+    }
+
+    let password = "";
+    const length = Number(lengthSlider.value);
+
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      password += characters[randomIndex];
+    }
+
+    passwordInput.value = password;
+
+    message.style.color = "green";
+    message.textContent = "";
+  }
+
+  generateButton.addEventListener("click", generatePassword);
+
+  copyButton.addEventListener("click", async function () {
+
+    if (!passwordInput.value) {
+      generatePassword();
+    }
+
+    try {
+      await navigator.clipboard.writeText(passwordInput.value);
+
+      message.style.color = "green";
+      message.textContent = "✅ Mot de passe copié !";
+
+    } catch (error) {
+
+      passwordInput.select();
+      document.execCommand("copy");
+
+      message.style.color = "green";
+      message.textContent = "✅ Mot de passe copié !";
+    }
+  });
+
+  generatePassword();
+</script>
+
+</body>
+</html>
